@@ -1,14 +1,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"log"
+
 	// FIXME: Replace s3 with the correct aws service subpackage from aws-sdk-go-v2
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 
-	"github.com/sensu-community/sensu-plugin-sdk/aws"
-	"github.com/sensu-community/sensu-plugin-sdk/sensu"
-	"github.com/sensu/sensu-go/api/core/v2"
+	v2 "github.com/sensu/sensu-go/api/core/v2"
+	"github.com/sensu/sensu-plugin-sdk/aws"
+	"github.com/sensu/sensu-plugin-sdk/sensu"
 )
 
 // Config represents the check plugin config.
@@ -45,7 +46,7 @@ var (
 )
 
 func init() {
-	//append AWS options to options list
+	//append common AWS options to options list
 	options = append(options, plugin.GetAWSOpts()...)
 }
 
@@ -87,7 +88,7 @@ type ServiceAPI interface {
 	GetBucketTagging(ctx context.Context, params *s3.GetBucketTaggingInput, optFns ...func(*s3.Options)) (*s3.GetBucketTaggingOutput, error)
 }
 
-// Note: Use interface definition to make function testable with mock API testing pattern
+// Note: Use ServiceAPI interface definition to make function testable with mock API testing pattern
 // FIXME: replace s3 with correct service from AWS SDK
 func checkFunction(client ServiceAPI) (int, error) {
 	inputs := &s3.ListBucketsInput{}
@@ -102,6 +103,10 @@ func checkFunction(client ServiceAPI) (int, error) {
 			if err != nil {
 				continue
 			}
+			if bucketOutput == nil {
+				continue
+			}
+
 		}
 	}
 	return sensu.CheckStateOK, nil

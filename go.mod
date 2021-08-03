@@ -1,8 +1,9 @@
 module github.com/{{ .GithubUser }}/{{ .GithubProject }}
 
-go 1.14
+go 1.15
 
 require (
-	github.com/sensu-community/sensu-plugin-sdk v0.11.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.11.1
 	github.com/sensu/sensu-go/api/core/v2 v2.3.0
+	github.com/sensu/sensu-plugin-sdk v0.13.2-0.20210803012537-ec7527368d00
 )
