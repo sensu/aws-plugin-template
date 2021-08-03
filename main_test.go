@@ -58,28 +58,6 @@ func TestCheckFunction(t *testing.T) {
 				},
 			},
 		},
-		{ //start of struct
-			client:        mockService{},
-			expectedState: 2,
-			tags: []string{
-				"bad_tag",
-			},
-			listBucketsOutput: &s3.ListBucketsOutput{
-				Buckets: []types.Bucket{
-					types.Bucket{
-						Name: func() *string { s := "test_bucket"; return &s }(),
-					},
-				},
-			},
-			getBucketTaggingOutput: &s3.GetBucketTaggingOutput{
-				TagSet: []types.Tag{
-					types.Tag{
-						Key:   func() *string { s := "test_key"; return &s }(),
-						Value: func() *string { s := "test_value"; return &s }(),
-					},
-				},
-			},
-		},
 	}
 	for i, tt := range cases {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
